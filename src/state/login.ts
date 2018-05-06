@@ -1,4 +1,5 @@
 import { Util } from '../util';
+import { Controller } from '../controller';
 
 export class Login extends Phaser.State {
 	loginText : Phaser.Text;
@@ -31,13 +32,14 @@ export class Login extends Phaser.State {
 		this.loginText.inputEnabled = true;
 		this.loginText.input.useHandCursor = true;
 		this.loginText.events.onInputDown.add(function(event) {
-			const uuid = Util.getLocalStorageValue('uuid');
-			
-			if (uuid) {
-				this.game.state.start('Stage');
-			} else {
-				this.game.state.start('Register');
-			}
+			// const uuid = Util.getLocalStorageValue('uuid');
+			Controller.getInstance().login((result) => {
+				if (result) {
+					this.game.state.start('Stage');	
+				} else {
+					this.game.state.start('Register');	
+				}
+			});
 		}, this);
 		
 	}
