@@ -5,7 +5,6 @@ import { Play } from '../state/play';
 import { Register } from '../state/register';
 
 import ServiceController from './serviceController';
-import { StateManager } from 'phaser-ce';
 import { Game } from '../maze';
 
 export default class StateController {
@@ -20,7 +19,7 @@ export default class StateController {
 	}
 
 	public initialize(game: Game.Maze, width: number, height: number) {
-		this.stateManager = new StateManager(game);
+		this.stateManager = new Phaser.StateManager(game);
 		this.game = game;
 		this.game.state = this.stateManager;
 

@@ -6,7 +6,6 @@ export class Level extends Base {
 
 	lowerStageBtn : Phaser.Button;
 	higherStageBtn : Phaser.Button;
-	stageGroup : Phaser.Group;
 	currentStage: number;
 	stageMap: any;
 

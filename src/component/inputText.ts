@@ -87,6 +87,7 @@ export namespace Component {
 				}
 				
 				this.phaserText.text += e.key;
+				this.text = this.phaserText.text;
 			});
 		}
 

@@ -6,9 +6,9 @@ export default abstract class DAO<T> {
 		this.session = session;
 	}
 
-	public abstract insert(key: string, obj: T): T;
-	public abstract select(key: string): T;
-	public abstract update(key: string, obj: T): T;
-	public abstract delete(key: string): boolean;
-	public abstract selectAll(): Array<T>;
+	public abstract insert(table: string, obj: T): T;
+	public abstract select(table: string, key: string): T;
+	public abstract update(table: string, key: string, obj: T): T;
+	public abstract delete(table: string, key: string): boolean;
+	public abstract selectAll(table: string): any;//Array<T>;
 }

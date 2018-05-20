@@ -2,28 +2,34 @@ import DAO from "./dao";
 import User from "../vo/user";
 
 export class UserDao extends DAO<User> {
-	public insert(key: string, obj: User): User {
-		this.session.set(key, obj.toString());
+	private readonly userKey = 'mazeUserRepo';
+	
+	public insert(table: string, obj: User): User {
+		const userDatabase = {};
+		userDatabase[obj.userId] = obj.toString();
+
+		this.session.set(table, obj.userId, JSON.stringify(userDatabase));
 
 		return obj;
 	}
 
-	public select(key: string): User {
-		const userStr = this.session.get(key);
+	public select(table: string, userId: string): User {
+		const userStr = this.session.get(table, userId);
+
 		const user: User = User.by(userStr);
 		return user;
 	}
 
-	public update(key: string, obj: User): User {
-		this.session.set(obj.userId, obj.toString());
+	public update(table: string,userId: string, obj: User): User {
+		this.session.set(table, userId, obj.toString());
 		
 		return obj;
 	}
 
-	public delete(key: string): boolean {
+	public delete(table: string,userId: string): boolean {
 		let isSuccess = true;
 		try {
-			this.session.remove(key);
+			this.session.remove(table, userId);
 		} catch {
 			isSuccess = false;
 		}
@@ -31,7 +37,10 @@ export class UserDao extends DAO<User> {
 		return isSuccess;
 	}
 
-	public selectAll(): User[] {
-		throw new Error('This is not supported');
+	public selectAll(table: string): any {
+		const objs = (<any>this).session.allStorage();
+		const obj = objs[table];
+
+		return obj;
 	}
 }

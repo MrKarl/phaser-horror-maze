@@ -28,7 +28,6 @@ export class Play extends Base {
 	}
 
 	init(stageInfo : Stage) {
-		console.log(stageInfo);
 		this.stageInfo = stageInfo;
 		this.playerPath = 'assets/img/player-spreadsheet.png';
 	}
@@ -40,17 +39,16 @@ export class Play extends Base {
 	}
 
 	create() {
-		this.game.stage.backgroundColor = '#000000';
+		this.game.stage.backgroundColor = '#000000'; 
+		// this.game.stage.backgroundColor = '0xffffff'; 
 
 		this.game.world.setBounds(0, 0, this.world.width, this.world.height-120);
-		this.game.physics.startSystem(Phaser.Physics.P2JS);
 		
-
 		this.createFloor();
 		this.makeFirstExitPoint();
 		this.createWall();
 		this.createPlayer(); 
-		// this.game.physics.p2.enable(this.player);
+
 		this.game.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
 		this.createMask();
@@ -58,8 +56,6 @@ export class Play extends Base {
 		this.floor.mask = this.mask;
 
 		this.timer = this.game.time.create(false);
-
-
 
 		this.cursor = this.game.input.keyboard.createCursorKeys();
 		this.game.input.keyboard.addCallbacks(this, (key) => {
@@ -75,6 +71,14 @@ export class Play extends Base {
 			}
 		});
 
+		this.createTimer();
+	}
+
+	private createTimer() {
+		const text = this.game.add.text(this.game.world.centerX, 500, 'Timer : ', {
+			fill: '#ffffff',
+			font: '15px Arial'
+		});
 	}
 
 	update() {
@@ -120,8 +124,9 @@ export class Play extends Base {
 	}
 
 	private createFloor() {
-		this.floor = this.game.add.sprite(0, 0, 'floor', 0);
-		// this.floor = this.game.add.tileSprite(0, 120, this.game.world.width, this.game.world.height - 120);
+		this.floor = this.game.add.sprite(0, 0, 'floor');
+		this.floor.width = 640;
+		this.floor.height = 480;
 	}
 
 	private createMask() {
@@ -141,7 +146,7 @@ export class Play extends Base {
 
 		const playerX = this.player.x;
 		const playerY = this.player.y;
-
+		
 		const dy = this.game.input.y - playerY;
 		const dx = this.game.input.x - playerX;
 

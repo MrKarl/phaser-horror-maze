@@ -49,7 +49,7 @@ export class Intro extends Base {
 		const self = this;
 		setTimeout(function() {
 			self.stateController.goState('Login');
-		}, Intro.introInterval)
+		}, Intro.introInterval);
 	}
 
 	update() {

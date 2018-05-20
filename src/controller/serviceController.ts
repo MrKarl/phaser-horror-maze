@@ -23,8 +23,8 @@ export default class ServiceController implements Controller {
 		this.stateController = game.stateController;
 	}	
 	
-	public login(callback) {
-		this.authService.login(callback);
+	public login(userId, callback) {
+		this.authService.login(userId, callback);
 	}
 
 	public registerUser(user: User) {
