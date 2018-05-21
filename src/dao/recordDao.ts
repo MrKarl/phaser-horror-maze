@@ -7,20 +7,20 @@ export class RecordDao extends DAO<Record> {
 	public insert(table: string, obj: Record): Record {
 		const recordDatabase = {};
 		recordDatabase[obj.userId] = obj.toString();
-		this.session.set(this.recordKey, obj.userId, JSON.stringify(recordDatabase));
+		this.session.set(table, obj.userId, JSON.stringify(recordDatabase));
 
 		return obj;
 	}
 
 	public select(table: string, userId: string): Record {
-		const allRecordData = this.session.get(this.recordKey, userId);
-		
-		const record: Record = Record.by(allRecordData);
+		const recordData = this.session.get(table, userId);
+
+		const record: Record = Record.by(recordData);
 		return record;
 	}
 
 	public update(table: string, userId: string, obj: Record): Record {
-		this.session.set(this.recordKey, userId, obj.toString());
+		this.session.set(table, userId, obj.toString());
 		
 		return obj;
 	}
@@ -28,7 +28,7 @@ export class RecordDao extends DAO<Record> {
 	public delete(table: string, userId: string): boolean {
 		let isSuccess = true;
 		try {
-			this.session.remove(this.recordKey, userId);
+			this.session.remove(table, userId);
 		} catch {
 			isSuccess = false;
 		}
@@ -36,7 +36,10 @@ export class RecordDao extends DAO<Record> {
 		return isSuccess;
 	}
 
-	public selectAll(table: string): Record[] {
-		throw new Error('This is not supported');
+	public selectAll(table: string): any {
+		const objs = (<any>this).session.allStorage();
+		const obj = objs[table];
+
+		return obj;
 	}
 }

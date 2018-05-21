@@ -26,7 +26,7 @@ export class UserDao extends DAO<User> {
 		return obj;
 	}
 
-	public delete(table: string,userId: string): boolean {
+	public delete(table: string, userId: string): boolean {
 		let isSuccess = true;
 		try {
 			this.session.remove(table, userId);

@@ -72,15 +72,6 @@ export class Register extends Base {
 		this.registerBtn.events.onInputOut.add((e) => {
 			this.registerBtn.alpha = 1;
 		}, this);
-
-		// this.registerBtn = this.game.add.button(btnX, btnY, btnText, (e) => {
-		// 	if (confirm(`${self.inputText.text}님으로 하시겠습니까?`)) {
-		// 		self.saveUserId();
-		// 		const stageInfo = self.serviceController.getStageInformation();
-		// 		self.stateController.goState('Stage', true, true, stageInfo);
-		// 	}
-		// }, this);
-
 	}
 
 	create() {

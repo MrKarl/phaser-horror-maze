@@ -1,5 +1,7 @@
 import ServiceController from "../controller/serviceController";
 import Base from "./base";
+import Record, { StageRecord } from "../vo/record"
+import { RankUtil } from "../vo/rank";
 
 export class Level extends Base {
 	readonly numberOfStage = 3;
@@ -8,6 +10,8 @@ export class Level extends Base {
 	higherStageBtn : Phaser.Button;
 	currentStage: number;
 	stageMap: any;
+
+	record: Record;
 
 	constructor(game) {
 		super(game);
@@ -19,6 +23,8 @@ export class Level extends Base {
 
 	preload() {
 		this.game.load.spritesheet('stageArrows', '../assets/img/stageArrows.png', 48, 48);
+
+		this.record = this.serviceController.getRecord();
 	}
 
 	create() {
@@ -36,13 +42,23 @@ export class Level extends Base {
 		const width = 200;
 		const height = 200;
 
-		let offsetX = (this.game.world.width - 200) / 3; // 200: padding
+		let offsetX = (this.game.world.width - 150) / this.numberOfStage; // 150: padding
 
-		const stageInfo = new Array(this.numberOfStage);
+		let stageInfos = {};
+		if (this.record) {
+			stageInfos = this.record.records;
+		}
 		
 		for (let i=0; i<this.numberOfStage; i++) {
-			
-			const stageBtnText = `Stage-${i+1}` + (stageInfo[i] ? '\n' + stageInfo[i] : '');
+			let stageInfo: StageRecord;
+			let stageInfoStr = '';
+			if (stageInfos[i]) {
+				stageInfo = stageInfos[i];
+				stageInfoStr += '\nTime: ' + stageInfo.time + ' seconds';
+				stageInfoStr += '\nRank: ' + RankUtil.valueOf(stageInfo.rank);
+			}
+
+			const stageBtnText = `Stage-${i+1}` + stageInfoStr;
 			const stageBtn = this.game.add.text(145 + (offsetX * i), 90, stageBtnText, {
 				fill: '#ffffff',
 				font: '15px Arial'
@@ -52,35 +68,27 @@ export class Level extends Base {
 			stageBtn.input.useHandCursor = true;
 			
 			const stageNum = i+1;
+			const self = this;
 			stageBtn.events.onInputDown.add((e) => {
 				if (confirm(`Wanna Go to Stage-${stageNum}?`)) {
-					this.stateController.goState('Play', true, true, this.stageMap[i]);
+					self.stateController.goState('Play', true, true, self.stageMap[i]);
 				}
 			}, this);
-
-			
-			
-
-			// const btn = this.game.add.button(100 + (offsetX * i), 50, `Stage - ${i}`, (e) => {
-			// 	if (confirm(`Go to Stage - ${i}?`)) {
-			// 		this.stateController.goState('Play', true, true, this.stageMap[i]);
-			// 	}
-			// }, this);
 		}
 	}
 
 	private drawStageMoveBtn() {
 		const p = this.game.world.bounds;
 
-		this.lowerStageBtn = this.game.add.button(100, 500 , "stageArrows", this.buttonClicked);
-		this.higherStageBtn = this.game.add.button(100, 500, "stageArrows", this.buttonClicked);
+		this.lowerStageBtn = this.game.add.button(100, this.game.world.centerY , "stageArrows", this.buttonClicked);
+		this.higherStageBtn = this.game.add.button(100, this.game.world.centerY, "stageArrows", this.buttonClicked);
 
 		this.lowerStageBtn.frame = 0;
 		this.higherStageBtn.frame = 1;
 
 		// Align stage page move btn
-		this.lowerStageBtn.x = 100;
-		this.higherStageBtn.x = p.right - 100 - this.higherStageBtn.width;
+		this.lowerStageBtn.x = 20;
+		this.higherStageBtn.x = p.right - 20 - this.higherStageBtn.width;
 
 		const stageText = this.game.add.text(this.game.world.centerX, 50, 'Stage', {
 			fill: '#ffffff',

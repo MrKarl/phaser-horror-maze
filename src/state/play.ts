@@ -1,11 +1,16 @@
 import Base from "./base";
 import { Stage } from "../vo/stage";
 import { Point } from "../vo/point";
+import { RecordDao } from "../dao/recordDao";
+import Record, { StageRecord } from "../vo/record";
+import { Rank } from "../vo/rank";
 
 export class Play extends Base {
 	static readonly rayLength = 500;
 	static readonly numOfRays = 20;
 	static readonly lightAngle = Math.PI/4; // 45 deg.
+
+	private readonly speed = 2;
 
 	timer : Phaser.Timer;
 
@@ -202,7 +207,7 @@ export class Play extends Base {
 		}
 
 		if (this.cursor.up.isDown) {
-			ySpeed -= 1;
+			ySpeed -= this.speed;
 			this.player.animations.play('north');
 			const northEast = this.pickColorOf(playerX + playerWidth/2 + xSpeed, playerY - playerHeight/2 + ySpeed, this.wallsBitMap);
 			const northWest = this.pickColorOf(playerX - playerWidth/2 + xSpeed, playerY - playerHeight/2 + ySpeed, this.wallsBitMap);
@@ -210,7 +215,7 @@ export class Play extends Base {
 		}
 		
 		if (this.cursor.down.isDown) {
-			ySpeed += 1;
+			ySpeed += this.speed;
 			this.player.animations.play('south');
 			const southEast = this.pickColorOf(playerX + playerWidth/2 + xSpeed, playerY + playerHeight/2 + ySpeed, this.wallsBitMap);
 			const southWest = this.pickColorOf(playerX - playerWidth/2 + xSpeed, playerY + playerHeight/2 + ySpeed, this.wallsBitMap);
@@ -218,7 +223,7 @@ export class Play extends Base {
 		}
 		
 		if (this.cursor.left.isDown) {
-			xSpeed -= 1;
+			xSpeed -= this.speed;
 			this.player.animations.play('west');
 			const westNorth = this.pickColorOf(playerX - playerWidth/2 + xSpeed, playerY - playerHeight/2 + ySpeed, this.wallsBitMap);
 			const westSouth = this.pickColorOf(playerX - playerWidth/2 + xSpeed, playerY + playerHeight/2 + ySpeed, this.wallsBitMap);
@@ -226,14 +231,14 @@ export class Play extends Base {
 		}
 		
 		if (this.cursor.right.isDown) {
-			xSpeed += 1;
+			xSpeed += this.speed;
 			this.player.animations.play('east');
 			const eastNorth = this.pickColorOf(playerX + playerWidth/2 + xSpeed, playerY - playerHeight/2 + ySpeed, this.wallsBitMap);
 			const eastSouth = this.pickColorOf(playerX + playerWidth/2 + xSpeed, playerY + playerHeight/2 + ySpeed, this.wallsBitMap);
 			color.east = eastNorth + eastSouth;
 		}
 
-		isMoving = Math.abs(xSpeed) + Math.abs(ySpeed) < 2 && Math.abs(xSpeed) + Math.abs(ySpeed) > 0;
+		isMoving = Math.abs(xSpeed) + Math.abs(ySpeed) < this.speed*2 && Math.abs(xSpeed) + Math.abs(ySpeed) > 0;
 		canMove = color.north + color.south + color.east + color.west == 0;
 		if (isMoving && canMove) {
 			this.player.x += xSpeed;
@@ -245,7 +250,18 @@ export class Play extends Base {
 		
 		if (Math.abs(this.currentExitPoint.x-this.player.x) < 3 && Math.abs(this.player.y-this.currentExitPoint.y) < 3) {
 			alert('Congrat!');
-			this.stateController.goState('Level');
+
+			const userId = this.serviceController.authService.getLastLoggedInUser().userId;
+			const stageId = this.stageInfo.stageId;
+			const stageRecord = new StageRecord(stageId, Rank.S, 80);
+			const stageRecordObj = {};
+			stageRecordObj[stageId] = stageRecord;
+			const record = new Record(userId, stageRecordObj);
+			debugger;
+			this.serviceController.recordRank(record);
+			
+			const stageInfo = this.serviceController.getStageInformation();
+			this.stateController.goState('Level', true, true, stageInfo);
 		}
 	}
 

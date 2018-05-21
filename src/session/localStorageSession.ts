@@ -27,7 +27,14 @@ export class LocalStorageSession implements Session {
 				localStorage.setItem(table, writtenData);
 			}
 		} else {
-			const obj = Object.assign({}, originalDataObj, JSON.parse(value));
+			let jsonValue = JSON.parse(value);
+			jsonValue[key] = JSON.parse(jsonValue[key]);
+
+			let temp = JSON.parse(originalDataObj);
+			let originalDataJson = {};
+			originalDataJson[key] = temp;
+
+			const obj = Object.assign({}, originalDataObj, jsonValue);
 			localStorage.setItem(table, obj);
 		}
 	}

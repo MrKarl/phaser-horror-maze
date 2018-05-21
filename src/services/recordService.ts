@@ -5,9 +5,11 @@ import { LocalStorageSession } from "../session/localStorageSession";
 import { RecordDao } from "../dao/recordDao";
 import Session from "../session/session";
 
-export default class RercordService implements Service {
+export default class RecordService implements Service {
 	recordDao : DAO<Record>;
 	session : Session;
+
+	private readonly RECORD_TABLE = 'mazeRecordInfo';
 
 	constructor() {
 		this.session = new LocalStorageSession();
@@ -18,7 +20,14 @@ export default class RercordService implements Service {
 		throw new Error("Method not implemented.");
 	}
 
-	getRecordsInfo(userId) {
-		
- 	}
+	public getRecord(userId: string): Record {
+		const record = this.recordDao.select(this.RECORD_TABLE, userId);
+		return record;
+	}
+
+	public setRecord(record: Record) {
+		this.recordDao.insert(this.RECORD_TABLE, record);
+	}
+
+	
 }
