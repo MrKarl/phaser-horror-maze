@@ -2,19 +2,19 @@ import DAO from "./dao";
 import Record from "../vo/record";
 
 export class RecordDao extends DAO<Record> {
-	private readonly recordKey = 'mazeRecordInfo';
 
 	public insert(table: string, obj: Record): Record {
-		const recordDatabase = {};
-		recordDatabase[obj.userId] = obj.toString();
-		this.session.set(table, obj.userId, JSON.stringify(recordDatabase));
+		// const recordDatabase = {};
+		// recordDatabase[obj.userId] = obj.toString();
+		debugger;
+		this.session.set(table, obj.userId, obj.toString());
 
 		return obj;
 	}
 
 	public select(table: string, userId: string): Record {
+		debugger;
 		const recordData = this.session.get(table, userId);
-
 		const record: Record = Record.by(recordData);
 		return record;
 	}

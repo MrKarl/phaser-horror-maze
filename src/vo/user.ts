@@ -1,44 +1,37 @@
 import Score from "./score";
+import Vo from "./vo";
 
-export default class User {
+export default class User extends Vo {
 	userId : string;
 	score : Score;
 	registerDate : Date;
 	lastVisitDate : Date;
 
 	constructor(userId, score) {
+		super();
 		this.userId = userId;
 		this.score = score;
 		this.registerDate = new Date();
 		this.lastVisitDate = new Date();
 	}
 
-	public static by(jsonString : string): User {
-		let json;
-		let user = null;
-		try {
-			json = JSON.parse(jsonString);
-			user = new User(json.userId, json.score);
-			user.registerDate = json.registerDate;
-			user.lastVisitDate = json.lastVisitDate;
-		} catch (e) {
-			// jsonString is not valid.
-			// Just ignore this case.
+	public static by(json : any): User {
+		if (json == null) {
+			return null;
 		}
+		const user: User = new User(json.userId, json.score);
+		user.registerDate = json.registerDate;
+		user.lastVisitDate = json.lastVisitDate;
 
 		return user;
 	}
 
-	public toString() {
-		return JSON.stringify(this.toJson());
-	}
-
-	public toJson() {
+	toJson() {
 		return {
 			userId: this.userId,
-			score: this.score.toString,
-			registerDate: this.registerDate.toString(),
-			lastVisitDate: this.lastVisitDate.toString(),
+			score: this.score,
+			registerDate: this.registerDate,
+			lastVisitDate: this.lastVisitDate,
 		};
 	}
 }

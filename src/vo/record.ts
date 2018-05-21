@@ -12,7 +12,12 @@ export default class Record extends Vo {
 	}
 
 	put(record: StageRecord) {
-		this.records[record.stageId] = record;
+		this.records[record.stageId] = {
+			stageId: record.stageId,
+			rank: record.rank,
+			time: record.time
+		}
+		// this.records[record.stageId] = record;
 	}
 
 	toJson() {
@@ -28,18 +33,12 @@ export default class Record extends Vo {
 		}
 	}
 
-	public static by(jsonString : string): Record {
-		let json;
-		let record = null;
-		try {
-			json = JSON.parse(jsonString);
-			record = new Record(json.userId, json.records);
-		} catch (e) {
-			// jsonString is not valid.
-			// Just ignore this case.
+	public static by(json : any): Record {
+		if (json == null) {
+			return null;
 		}
-
-		return record;
+		const user: Record = new Record(json.userId, json.records);
+		return user;
 	}
 }
 

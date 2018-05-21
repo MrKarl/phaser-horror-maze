@@ -29,6 +29,7 @@ export class Play extends Base {
 	currentExitGraphic : Phaser.Graphics;
 
 	wallCollisionSound: Phaser.Sound;
+	tadaSound: Phaser.Sound;
 
 	constructor(game) {
 		super(game);
@@ -43,11 +44,13 @@ export class Play extends Base {
 		this.game.load.image('floor', this.stageInfo.floorFilePath);
 		this.game.load.image('wall', this.stageInfo.wallFilePath);
 		this.game.load.spritesheet('player', this.playerPath, 64, 64, 36);
-		this.load.audio("wallCollisionSound", ["assets/mp3/beep-01a.mp3.mp3"]);
+		this.load.audio("wallCollisionSound", ["assets/mp3/beep-01a.mp3"]);
+		this.load.audio("tadaSound", ["assets/mp3/tada-01a.mp3"]);
 	}
 
 	create() {
 		this.wallCollisionSound = this.add.audio('wallCollisionSound');
+		this.tadaSound = this.add.audio('tadaSound');
 
 		this.game.stage.backgroundColor = '#000000'; 
 		// this.game.stage.backgroundColor = '0xffffff'; 
@@ -249,14 +252,18 @@ export class Play extends Base {
 			this.player.x += xSpeed;
 			this.player.y += ySpeed;
 		} else {
+			this.stopPlayerAnimcateion();
+		}
+
+		if (isMoving && !canMove) {
 			this.game.camera.shake();
 			this.wallCollisionSound.play();
-			this.stopPlayerAnimcateion();
 		}
 
 		
 		if (Math.abs(this.currentExitPoint.x-this.player.x) < 3 && Math.abs(this.player.y-this.currentExitPoint.y) < 3) {
 			alert('Congrat!');
+			this.tadaSound.play();
 
 			const userId = this.serviceController.authService.getLastLoggedInUser().userId;
 			const stageId = this.stageInfo.stageId;
@@ -264,7 +271,6 @@ export class Play extends Base {
 			const stageRecordObj = {};
 			stageRecordObj[stageId] = stageRecord;
 			const record = new Record(userId, stageRecordObj);
-			debugger;
 			this.serviceController.recordRank(record);
 			
 			const stageInfo = this.serviceController.getStageInformation();

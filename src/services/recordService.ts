@@ -9,7 +9,7 @@ export default class RecordService implements Service {
 	recordDao : DAO<Record>;
 	session : Session;
 
-	private readonly RECORD_TABLE = 'mazeRecordInfo';
+	private readonly RECORD_TABLE = 'mazeRecordRepo';
 
 	constructor() {
 		this.session = new LocalStorageSession();

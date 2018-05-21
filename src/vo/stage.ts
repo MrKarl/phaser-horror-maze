@@ -3,6 +3,15 @@ import { MapType } from "./mapType";
 import { Rank } from "./rank";
 
 export class Stage {
+	constructor(stageId: number, floorFilePath: string, wallFilePath: string, exitPoints: Array<Point>, timeLimit=5000) {
+		this.stageId = stageId;
+		this.floorFilePath = floorFilePath;
+		this.wallFilePath = wallFilePath;
+		this.exitPoints = exitPoints;
+
+		this.timeLimit = timeLimit;
+	}
+	
 	stageId : number;
 	floorFilePath : string;
 	wallFilePath : string;
@@ -17,12 +26,5 @@ export class Stage {
 	//TODO: ???
 	sound : Phaser.Sound;
 
-	constructor(stageId: number, floorFilePath: string, wallFilePath: string, exitPoints: Array<Point>, timeLimit=5000) {
-		this.stageId = stageId;
-		this.floorFilePath = floorFilePath;
-		this.wallFilePath = wallFilePath;
-		this.exitPoints = exitPoints;
-
-		this.timeLimit = timeLimit;
-	}
+	
 }

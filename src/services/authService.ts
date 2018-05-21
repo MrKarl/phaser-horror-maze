@@ -26,6 +26,7 @@ export default class AuthService implements Service {
 		const obj = this.userDao.selectAll(this.TABLE_LAST_LOGGED_IN);
 		let userObj;
 		let user;
+		debugger;
 		try {
 			userObj = JSON.parse(obj);
 			const userId = Object.keys(userObj)[0];

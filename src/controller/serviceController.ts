@@ -48,8 +48,6 @@ export default class ServiceController implements Controller {
 	}
 
 	public recordRank(record: Record) {
-		const userId = this.authService.getLastLoggedInUser().userId;
-		debugger
 		this.recordService.setRecord(record);
 	}
 }
