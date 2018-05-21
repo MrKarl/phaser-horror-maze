@@ -28,6 +28,8 @@ export class Play extends Base {
 	currentExitPoint : Point;
 	currentExitGraphic : Phaser.Graphics;
 
+	wallCollisionSound: Phaser.Sound;
+
 	constructor(game) {
 		super(game);
 	}
@@ -41,9 +43,12 @@ export class Play extends Base {
 		this.game.load.image('floor', this.stageInfo.floorFilePath);
 		this.game.load.image('wall', this.stageInfo.wallFilePath);
 		this.game.load.spritesheet('player', this.playerPath, 64, 64, 36);
+		this.load.audio("wallCollisionSound", ["assets/mp3/beep-01a.mp3.mp3"]);
 	}
 
 	create() {
+		this.wallCollisionSound = this.add.audio('wallCollisionSound');
+
 		this.game.stage.backgroundColor = '#000000'; 
 		// this.game.stage.backgroundColor = '0xffffff'; 
 
@@ -244,6 +249,8 @@ export class Play extends Base {
 			this.player.x += xSpeed;
 			this.player.y += ySpeed;
 		} else {
+			this.game.camera.shake();
+			this.wallCollisionSound.play();
 			this.stopPlayerAnimcateion();
 		}
 
