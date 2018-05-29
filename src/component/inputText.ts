@@ -55,7 +55,6 @@ export namespace Component {
 			const self = this;
 			this.game.input.onDown.add((sprite, pointer) => {
 				self.clickCount++;
-debugger;
 				if (self.clickCount == 1) {
 					self.phaserText.setText('');
 				}
@@ -79,7 +78,6 @@ debugger;
 			}, this);
 
 			this.game.input.keyboard.addCallbacks(this, (e) => {
-				debugger;
 				if (!self.isFocus) {
 					return;
 				}
