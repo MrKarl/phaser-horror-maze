@@ -73,19 +73,6 @@ export class Play extends Base {
 		this.timer = this.game.time.create(false);
 
 		this.cursor = this.game.input.keyboard.createCursorKeys();
-		this.game.input.keyboard.addCallbacks(this, (key) => {
-			//TODO: wasd 가능하게 할 것
-			if (key.keyCode === 87) {		// W, Up
-				
-			} else if (key.key === 65) {	// A, Left
-			
-			} else if (key.key === 83) {	// S, Down
-			
-			} else if (key.key === 68) {	// D, Right
-			
-			}
-		});
-
 		this.createTimer();
 	}
 
