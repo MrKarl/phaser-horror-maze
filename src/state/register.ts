@@ -58,10 +58,19 @@ export class Register extends Base {
 		this.registerBtn.input.useHandCursor = true;
 
 		this.registerBtn.events.onInputDown.add((e) => {
-			if (confirm(`${self.inputText.text}님으로 하시겠습니까?`)) {
-				self.saveUserId();
-				const stageInfo = self.serviceController.getStageInformation();
-				self.stateController.goState('Level', true, true, stageInfo);
+			const userId = self.inputText.text;
+			if (confirm(`${userId}님으로 하시겠습니까?`)) {
+				
+				self.saveUserId(userId, (user, isAlreadyExist) => {
+					if (isAlreadyExist) {
+						alert(`${self.inputText.text}님 예전에 오신적이있으시군요. 다시 한번 환영합니다.`);
+					}
+
+					self.serviceController.login(user.userId, (user, isSuccess) => {
+						const stageInfo = self.serviceController.getStageInformation();
+						self.stateController.goState('Level', true, true, stageInfo);
+					});
+				});
 			}
 		}, this);
 
@@ -84,9 +93,8 @@ export class Register extends Base {
 		this.inputText.render();
 	}
 
-	saveUserId() {
-		let userId = this.inputText.text;
+	saveUserId(userId, callback) {
 		const user = new User(userId, new Score());
-		this.serviceController.registerUser(user);
+		this.serviceController.registerUser(user, callback);
 	}
 }

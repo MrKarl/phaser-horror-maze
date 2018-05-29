@@ -30,8 +30,13 @@ export default class AuthService implements Service {
 		try {
 			userObj = JSON.parse(obj);
 			const userId = Object.keys(userObj)[0];
-			user = userObj[userId];
-			user = JSON.parse(user);
+			let userStr = userObj[userId];
+			if (typeof userStr === 'string') {
+				user = JSON.parse(userStr);
+			} else {
+				user = userStr;
+			}
+			
 		} catch (e) {
 			user = null;
 		}
@@ -39,27 +44,31 @@ export default class AuthService implements Service {
 		return user;
 	}
 
-	public registerUser(user : User) {
-		this.userDao.insert(this.USER_TABLE, user);
-		this.userDao.insert(this.TABLE_LAST_LOGGED_IN, user);
+	public registerUser(user : User, callback: (user: User, isAlreadyExist: boolean) => void) {
+		const userId = user.userId;
+		const userInSession = this.userDao.select(this.USER_TABLE, userId);
+		
+		let isAlreadyExist = true;
+		if (!userInSession) {
+			this.userDao.insert(this.USER_TABLE, user);
+			isAlreadyExist = false;
+		}
+
+		callback(user, isAlreadyExist);
 	}
 
 	public login(userId: string, callback: (user: User, isSuccess: boolean) => void) {
 		const user = this.userDao.select(this.USER_TABLE, userId);
 		if (user) {
+			this.userDao.delete(this.TABLE_LAST_LOGGED_IN, userId);
+			this.userDao.insert(this.TABLE_LAST_LOGGED_IN, user);
 			callback(user, true);
 		} else {
 			callback(null, false);
 		}
 	}
 
-	public logout(userId) {
-		//TODO: implements it.
-
-		const user = this.userDao.select(this.USER_TABLE, userId);
-		
-		console.log('next user would be removed.');
-		console.log(user);
-		this.userDao.delete(this.USER_TABLE, userId);
+	public logout(userId: string) {
+		this.userDao.delete(this.TABLE_LAST_LOGGED_IN, userId);
 	}
 }

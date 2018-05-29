@@ -34,8 +34,8 @@ export default class ServiceController implements Controller {
 		this.authService.login(userId, callback);
 	}
 
-	public registerUser(user: User) {
-		this.authService.registerUser(user);
+	public registerUser(user: User, callback: (user: User, isAlreadyExist: boolean) => void) {
+		this.authService.registerUser(user, callback);
 	}
 
 	public getRecord() : Record {

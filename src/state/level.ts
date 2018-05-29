@@ -8,6 +8,8 @@ export class Level extends Base {
 
 	lowerStageBtn : Phaser.Button;
 	higherStageBtn : Phaser.Button;
+
+	logoutBtn : Phaser.Button;
 	
 	numberOfStage: number;
 	numberOfPage: number;
@@ -31,6 +33,8 @@ export class Level extends Base {
 
 	preload() {
 		this.game.load.spritesheet('stageArrows', '../assets/img/stageArrows.png', 48, 48);
+		this.game.load.image('logoutBtn', '../assets/img/logoutBtn.png');
+
 		this.record = this.serviceController.getRecord();
 		this.stageBtnGroup = this.game.add.group();
 	}
@@ -40,10 +44,22 @@ export class Level extends Base {
 		this.game.stage.alpha = 0.9;
 		this.drawStageBtn(this.currentPage);
 		this.drawStageMoveBtn();
+		this.drawLogoutBtn();
 	}
 
 	update() {
 
+	}
+
+	private drawLogoutBtn() {
+		this.logoutBtn = this.game.add.button(this.game.world.centerX, 500, 'logoutBtn', () => {
+			if (confirm('Logout 하시겠습니까?')) {
+				// Remove lastLoggedInUser
+				this.serviceController.authService.logout(this.serviceController.authService.getLastLoggedInUser().userId);
+			}
+		}, this);
+
+		this.logoutBtn.anchor.setTo(0.5, 0.5);
 	}
 
 	private clearStageBtnField() {

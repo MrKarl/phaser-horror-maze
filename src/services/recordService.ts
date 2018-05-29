@@ -28,6 +28,4 @@ export default class RecordService implements Service {
 	public setRecord(record: Record) {
 		this.recordDao.insert(this.RECORD_TABLE, record);
 	}
-
-	
 }

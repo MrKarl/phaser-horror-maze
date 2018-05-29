@@ -14,4 +14,28 @@
 <body>
 	<div id="game"></div>
 </body>
+
+<script>
+	var debug = {
+		clearAll, getRecord, getUser, getSession
+	};
+
+	function clearAll() {
+		localStorage.setItem('mazeRecordRepo', '');
+		localStorage.setItem('mazeUserRepo', '');
+		localStorage.setItem('lastLoggedInUser', '');
+	};
+
+	function getRecord() {
+		return localStorage.getItem('mazeRecordRepo');
+	}
+
+	function getUser() {
+		return localStorage.getItem('mazeUserRepo');
+	}
+
+	function getSession() {
+		return localStorage.getItem('lastLoggedInUser');
+	}
+</script>
 </html>
