@@ -18,6 +18,8 @@ export namespace Component {
 
 		phaserText : Phaser.Text;
 
+		clickCount = 0;
+
 		constructor(game, x, y, width, height, maxLength, text, style) {
 			super(game, x, y,  text, style);
 			this.placeholder = 'Input Text';
@@ -35,9 +37,7 @@ export namespace Component {
 			let group = this.game.add.group();
 			let graphics = this.game.make.graphics();
 			graphics.lineStyle(2, 0x000000, 1);
-			// graphics.beginFill(0xFF700B, 1);
 			graphics.drawRect(x, y, width, height);
-			// graphics.endFill();
 			group.add(graphics);
 
 			this.phaserText = this.game.add.text(x, y, text, style);
@@ -51,48 +51,53 @@ export namespace Component {
 				this.phaserText.alpha = 1;
 			}, this);
 			
-			this.game.input.onDown.add((sprite, pointer) => {
-				let textX = this.phaserText.world.x;
-				let textWidth = this.phaserText.width;
 
-				let textY = this.phaserText.world.y;
-				let textHeight = this.phaserText.height;
+			const self = this;
+			this.game.input.onDown.add((sprite, pointer) => {
+				self.clickCount++;
+debugger;
+				if (self.clickCount == 1) {
+					self.phaserText.setText('');
+				}
+
+				let textX = self.phaserText.world.x;
+				let textWidth = self.width;
+
+				let textY = self.phaserText.world.y;
+				let textHeight = self.height;
 
 				if (pointer.clientX > textX && pointer.clientX <= textX + textWidth) {
 					if (pointer.clientY > textY && pointer.clientY <= textY + textHeight) {
-						this.isFocus = true;
-						this.phaserText.alpha = 1;
+						self.isFocus = true;
+						self.phaserText.alpha = 1;
 						return;
 					}
 				}
 
-				this.phaserText.alpha = 0.6;
-				this.isFocus = false;
+				self.phaserText.alpha = 0.6;
+				self.isFocus = false;
 			}, this);
 
 			this.game.input.keyboard.addCallbacks(this, (e) => {
-				if (!this.isFocus) {
+				debugger;
+				if (!self.isFocus) {
 					return;
 				}
 				
 				if (e.keyCode == Phaser.Keyboard.BACKSPACE) {
-					this.phaserText.text = this.phaserText.text.slice(0, -1);
+					self.phaserText.text = self.phaserText.text.slice(0, -1);
 
 					
 					return;
 				} 
 
-				if (this.phaserText.text.length + 1 > this.maxLength) {
+				if (self.phaserText.text.length + 1 > self.maxLength) {
 					return;
 				}
 				
-				this.phaserText.text += e.key;
-				this.text = this.phaserText.text;
+				self.phaserText.text += e.key;
+				self.text = self.phaserText.text;
 			});
-		}
-
-		render() {
-			
 		}
 	}
 }

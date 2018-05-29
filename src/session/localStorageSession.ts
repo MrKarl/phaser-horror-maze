@@ -23,7 +23,6 @@ export class LocalStorageSession implements Session {
 	set(table: string, key: string, value: string) {
 		const originalDataObj = this.get(table, key);
 		if (!originalDataObj) {
-debugger;
 			const tableData = localStorage.getItem(table) || null;
 			if (tableData) {
 				const tableJsonObj = JSON.parse(tableData);
@@ -38,8 +37,6 @@ debugger;
 		} else {
 			const tableData = localStorage.getItem(table);
 			const tableJsonObj = JSON.parse(tableData);
-
-debugger;
 			let jsonValue = JSON.parse(value);
 			let data = {};
 			data[key] = jsonValue;

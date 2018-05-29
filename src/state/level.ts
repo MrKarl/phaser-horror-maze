@@ -56,6 +56,7 @@ export class Level extends Base {
 			if (confirm('Logout 하시겠습니까?')) {
 				// Remove lastLoggedInUser
 				this.serviceController.authService.logout(this.serviceController.authService.getLastLoggedInUser().userId);
+				this.stateController.goState('Login');
 			}
 		}, this);
 

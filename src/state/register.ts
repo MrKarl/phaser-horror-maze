@@ -22,7 +22,7 @@ export class Register extends Base {
 		let textX = this.game.world.centerX - textWidth/2;
 		let textY = this.game.world.centerY - textHeight/2;
 
-		let textMaxLength = 20;
+		let textMaxLength = 14;
 
 		let textStyle = {
 			fill: '#000000',
@@ -31,7 +31,7 @@ export class Register extends Base {
 			font: '20px Arial'
 		}
 
-		this.inputText = new Component.InputText(this.game, textX, textY, textWidth, textHeight, textMaxLength, 'ex) User00700', textStyle);
+		this.inputText = new Component.InputText(this.game, textX, textY, textWidth, textHeight, textMaxLength, 'ex)user001', textStyle);
 	}
 
 	private setRegisterButton() {
@@ -87,10 +87,6 @@ export class Register extends Base {
 		this.setRegisterInputText();
 		this.setRegisterButton();
 		
-	}
-
-	update() {
-		this.inputText.render();
 	}
 
 	saveUserId(userId, callback) {
