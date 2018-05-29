@@ -27,27 +27,15 @@ export class LocalStorageSession implements Session {
 			data[key] = value;
 			localStorage.setItem(table, JSON.stringify(data));
 		} else {
-			debugger;
 			let jsonValue = JSON.parse(value);
 			let data = {};
 			data[key] = jsonValue;
 
 			let data2 = {};
 			data2[key] = originalDataObj;
-
-			// const obj = Object.assign({}, data, data2);
-			const obj = this.extend(data, data2);
-			localStorage.setItem(table, JSON.stringify(obj));
 			
-			// let jsonValue = JSON.parse(value);
-			// jsonValue[key] = JSON.parse(jsonValue[key]);
-
-			// let temp = JSON.parse(originalDataObj);
-			// let originalDataJson = {};
-			// originalDataJson[key] = temp;
-
-			// const obj = Object.assign({}, originalDataObj, jsonValue);
-			// localStorage.setItem(table, JSON.stringify(obj));
+			const obj = this.extend(data2, data);
+			localStorage.setItem(table, JSON.stringify(obj));
 		}
 	}
 

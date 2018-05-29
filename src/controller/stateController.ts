@@ -14,14 +14,18 @@ export default class StateController {
 	width: number;
 	height: number;
 
+
+	gameVersion: string;
+
 	constructor() {
 
 	}
 
-	public initialize(game: Game.Maze, width: number, height: number) {
+	public initialize(game: Game.Maze, width: number, height: number, gameVersion: string) {
 		this.stateManager = new Phaser.StateManager(game);
 		this.game = game;
 		this.game.state = this.stateManager;
+		this.gameVersion = gameVersion;
 
 		this.width = width;
 		this.height = height;
@@ -31,12 +35,11 @@ export default class StateController {
 
 	startState(state? : string) {
 		let startingState = 'Intro';
-		// let startingState = 'Stage';
 		if (state === 'undefined' || state === null) {
 			startingState = state;
 		}
 
-		this.goState(startingState, true, true, 'Horror Maze');
+		this.goState(startingState, true, true, 'Horror Maze', this.gameVersion);
 	}
 
 	public goState(state: string, clearWorld?: boolean, clearCache?: boolean, ...args: any[]) {

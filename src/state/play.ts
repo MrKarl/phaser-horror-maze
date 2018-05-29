@@ -13,8 +13,10 @@ export class Play extends Base {
 	private readonly speed = 2;
 
 	timer : Phaser.Timer;
-
-	// floor : Phaser.TileSprite;
+	elapsedTime : number;
+	timeHandler: number;
+	timeText : Phaser.Text;
+	
 	floor : Phaser.Sprite;
 	wall : Phaser.Sprite;
 	wallsBitMap : Phaser.BitmapData;
@@ -88,20 +90,45 @@ export class Play extends Base {
 	}
 
 	private createTimer() {
-		const text = this.game.add.text(this.game.world.centerX, 500, 'Timer : ', {
+		this.timeText = this.game.add.text(this.game.world.centerX, 500, 'Timer: 0 second', {
 			fill: '#ffffff',
 			font: '15px Arial'
 		});
+
+		this.startTimer();
 	}
+
+	private startTimer() {
+		this.elapsedTime = 0;
+		const self = this;
+		this.timeHandler = setInterval(() => {
+			self.elapsedTime++;
+		}, 1000);
+	}
+
+	private stopTimer() {
+		clearInterval(this.timeHandler);
+	}
+
+	private countTime() {
+		// this.elapsedTime = this.game.time.totalElapsedSeconds();
+
+		let timeText = 'Timer: ' + this.elapsedTime + ' seconds'
+		this.timeText.setText(timeText, true);
+	}
+
 
 	update() {
 		this.movePlayer();
 		this.moveFlash();
 		this.randomAlphaTo(this.floor);
+		this.countTime();
 	}
 
 	render() {
 		this.game.debug.inputInfo(32, 32);
+
+		
 	}
 
 	private makeFirstExitPoint() {
@@ -267,7 +294,9 @@ export class Play extends Base {
 
 			const userId = this.serviceController.authService.getLastLoggedInUser().userId;
 			const stageId = this.stageInfo.stageId;
-			const stageRecord = new StageRecord(stageId, Rank.S, 80);
+			const rank = this.serviceController.rankService.calculateRank(stageId, this.elapsedTime);
+
+			const stageRecord = new StageRecord(stageId, rank, this.elapsedTime);
 			const stageRecordObj = {};
 			stageRecordObj[stageId] = stageRecord;
 			const record = new Record(userId, stageRecordObj);
@@ -275,6 +304,8 @@ export class Play extends Base {
 			
 			const stageInfo = this.serviceController.getStageInformation();
 			this.stateController.goState('Level', true, true, stageInfo);
+
+			this.stopTimer();
 		}
 	}
 
@@ -288,10 +319,5 @@ export class Play extends Base {
 		this.player.animations.stop('south');
 		this.player.animations.stop('west');
 		this.player.animations.stop('east');
-	}
-
-
-	private goFullScreen() {
-
 	}
 }

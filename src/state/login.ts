@@ -47,7 +47,7 @@ export class Login extends Base {
 				if (user && user.userId) {
 					self.serviceController.login(user.userId, (user: User, isSuccess: boolean) => {
 						if (isSuccess) {
-							alert(`${user.userId}님 환영합니다.`);
+							alert(`${user.userId}님, 다시 방문해주셨군요. 환영합니다.`);
 							const stageInfo = self.serviceController.getStageInformation();
 							self.stateController.goState('Level', true, true, stageInfo);
 						} else {

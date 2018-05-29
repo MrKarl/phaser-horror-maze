@@ -7,6 +7,7 @@ import Util from "../util/util";
 import User from "../vo/user";
 import RecordService from "../services/recordService";
 import Record from "../vo/record";
+import RankService from "../services/rankService";
 
 export default class ServiceController implements Controller {
 	game : Phaser.Game;
@@ -14,16 +15,17 @@ export default class ServiceController implements Controller {
 	stageService : StageService;
 	authService : AuthService;
 	recordService : RecordService;
+	rankService : RankService;
 
 	// It is necessary for controling state.
 	stateController : StateController;
 
 	constructor(game: Game.Maze) {
-		this.game = game;
-		
+		this.game = game;		
 		this.stageService = new StageService();
 		this.authService = new AuthService();
 		this.recordService = new RecordService();
+		this.rankService = new RankService();		
 		
 		this.stateController = game.stateController;
 	}	
@@ -38,13 +40,12 @@ export default class ServiceController implements Controller {
 
 	public getRecord() : Record {
 		const userId = this.authService.getLastLoggedInUser().userId;
-		debugger
 		const record = this.recordService.getRecord(userId);
 		return record;
 	}
 
 	public getStageInformation() {
-		return this.stageService.stageMap;
+		return this.stageService.getStageInformation();
 	}
 
 	public recordRank(record: Record) {

@@ -5,6 +5,8 @@ import StateController from "./controller/stateController";
 
 export namespace Game {
 	export class Maze extends Phaser.Game {
+		static GAME_VERSION = "v1.0";
+
 		serviceController : ServiceController;
 		stateController : StateController;
 
@@ -14,7 +16,7 @@ export namespace Game {
 			this.serviceController = new ServiceController(this);
 
 			this.stateController = new StateController();
-			this.stateController.initialize(this, width, height);
+			this.stateController.initialize(this, width, height, Maze.GAME_VERSION);
 			this.stateController.startState();
 		}
 	}

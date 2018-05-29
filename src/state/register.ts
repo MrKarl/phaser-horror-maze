@@ -75,7 +75,6 @@ export class Register extends Base {
 	}
 
 	create() {
-
 		this.setRegisterInputText();
 		this.setRegisterButton();
 		

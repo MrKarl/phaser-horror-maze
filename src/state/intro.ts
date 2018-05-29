@@ -1,17 +1,19 @@
 import Base from "./base";
 
 export class Intro extends Base {
-	static introInterval = 1500;
+	static introInterval = 2000;
 
 	gameTitle : string;
+	gameVersion : string;
 	logoText : Phaser.Text;
 
 	constructor(game: Phaser.Game) {
 		super(game);
 	}
 
-	init(gameTitle) {
+	init(gameTitle, gameVersion) {
 		this.gameTitle = gameTitle;
+		this.gameVersion = gameVersion;
 	}
 
 	preload() {
@@ -19,7 +21,7 @@ export class Intro extends Base {
 	}
 
 	create() {
-		this.stage.backgroundColor = '#4488AA';
+		this.stage.backgroundColor = '#3b3b3b';
 
 		this.logoText = this.game.add.text(
 			this.game.world.centerX, 
@@ -36,9 +38,9 @@ export class Intro extends Base {
 		const p = this.game.world.bounds.bottomRight;
 		
 		const footer = this.game.add.text(
-			p.x - 100,
-			p.y - 30,
-			'v1.0, made with Phaser',
+			p.x-50,
+			p.y-30,
+			this.gameVersion,
 			{
 				font: '15px Arial;',
 				fill: '#eeeeee'

@@ -1,4 +1,3 @@
-// import * as g from './maze'
 import { Game } from './maze';
 
 window.onload = () => {

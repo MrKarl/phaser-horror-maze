@@ -5,18 +5,15 @@ export class UserDao extends DAO<User> {
 	private readonly userKey = 'mazeUserRepo';
 	
 	public insert(table: string, obj: User): User {
-		// const userDatabase = {};
-		// userDatabase[obj.userId] = obj.toString();
-		debugger;
 		this.session.set(table, obj.userId, obj.toString());
 
 		return obj;
 	}
 
 	public select(table: string, userId: string): User {
-		const userStr = this.session.get(table, userId);
+		const userJson = this.session.get(table, userId);
 
-		const user: User = User.by(userStr);
+		const user: User = User.by(userJson);
 		return user;
 	}
 

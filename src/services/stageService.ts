@@ -3,7 +3,7 @@ import { Stage } from "../vo/stage";
 import { Point } from "../vo/point";
 
 export default class StageService implements Service {
-	userId : string;
+	static NUM_OF_STAGE = 5;
 	stageMap : any;
 	
 	constructor() {
@@ -11,24 +11,20 @@ export default class StageService implements Service {
 		this.generateStageMap();
 	}
 
-	public initialize() {
-		
+	public initialize() { }
+
+	public getStageInformation() {
+		return this.stageMap;
 	}
 
-	public getStageInformation(userId : string) {
-
-	}
-
+	// Load Stage Map Information
 	private generateStageMap() {
-		for (let i=0; i<3; i++) {
+		for (let i=0; i<StageService.NUM_OF_STAGE; i++) {
 			let zeroFormat = '000' + i;
 			let mapSeq = zeroFormat.slice(-3);
 
 			const floorPath = 'assets/img/maps/floor-' + mapSeq + '.png';
 			const wallPath = 'assets/img/maps/walls-' + mapSeq + '.png';
-
-			// const stage = new Stage(i, floorPath, wallPath, Point.on(235, 85));
-
 
 			const stage = new Stage(i, floorPath, wallPath, 
 				[
