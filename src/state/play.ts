@@ -98,8 +98,6 @@ export class Play extends Base {
 	}
 
 	private countTime() {
-		// this.elapsedTime = this.game.time.totalElapsedSeconds();
-
 		let timeText = 'Timer: ' + this.elapsedTime + ' seconds'
 		this.timeText.setText(timeText, true);
 	}
@@ -113,9 +111,8 @@ export class Play extends Base {
 	}
 
 	render() {
-		this.game.debug.inputInfo(32, 32);
-
-		
+		// For debug
+		// this.game.debug.inputInfo(32, 32);
 	}
 
 	private makeFirstExitPoint() {
